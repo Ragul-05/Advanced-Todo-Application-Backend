@@ -4,7 +4,6 @@ import com.example.todoapp.dto.*;
 import com.example.todoapp.model.User;
 import com.example.todoapp.repository.UserRepository;
 import com.example.todoapp.security.JwtService;
-import com.example.todoapp.util.ApiResponse;
 import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public ApiResponse register(RegisterRequest request) {
+    public User register(RegisterRequest request) {
 
         if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new RuntimeException("Passwords do not match");
@@ -42,9 +41,7 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        userRepository.save(user);
-
-        return new ApiResponse("Registration successful");
+        return userRepository.save(user);
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -56,8 +53,15 @@ public class AuthService {
                 )
         );
 
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow();
 
-        return new AuthResponse(jwtService.generateToken(user));
+        String token = jwtService.generateToken(user);
+
+        return new AuthResponse(
+                token,
+                user.getEmail(),
+                "Bearer"
+        );
     }
 }
