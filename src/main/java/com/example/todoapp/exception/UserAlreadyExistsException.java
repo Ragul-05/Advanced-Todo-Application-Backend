@@ -1,4 +1,6 @@
 package com.example.todoapp.exception;
 
-public class UserAlreadyExistsException {
+public class UserAlreadyExistsException extends Throwable {
+    public UserAlreadyExistsException(String emailAlreadyExists) {
+    }
 }

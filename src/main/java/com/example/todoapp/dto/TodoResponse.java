@@ -1,45 +1,21 @@
-package com.example.todoapp.model;
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+package com.example.todoapp.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity
-@Table(name = "todos")
-public class Todo {
+public class TodoResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // DB PRIMARY KEY (DO NOT RESET)
-
-    @Column(name = "display_id", nullable = false)
-    private Integer displayId; // UI NUMBERING
-
-    @NotBlank
-    @Column(nullable = false)
+    private Long id;          // DB ID
+    private Integer displayId; // UI ID
     private String title;
-
-    @Column(length = 1000)
     private String description;
-
     private LocalDate dueDate;
     private LocalTime dueTime;
+    private String category;
+    private String priority;
+    private boolean completed;
 
-    @NotBlank
-    private String category;   // Work, Personal, Study
-
-    @NotBlank
-    private String priority;   // Low, Medium, High
-
-    private boolean completed = false;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    /* ===== Getters & Setters ===== */
+    /* Getters & Setters */
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -67,7 +43,4 @@ public class Todo {
 
     public boolean isCompleted() { return completed; }
     public void setCompleted(boolean completed) { this.completed = completed; }
-
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
 }

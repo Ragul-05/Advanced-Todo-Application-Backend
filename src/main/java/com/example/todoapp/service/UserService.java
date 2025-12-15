@@ -1,4 +1,4 @@
 package com.example.todoapp.service;
 
-public class SettingsService {
+public class UserService {
 }
