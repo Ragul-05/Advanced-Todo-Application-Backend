@@ -29,13 +29,13 @@ public class ProfileController {
         );
     }
 
-    /* UPDATE NAME / EMAIL */
+    /* UPDATE NAME */
     @PutMapping
     public ResponseEntity<ApiResponse<ProfileResponse>> updateProfile(
             @RequestBody ProfileUpdateRequest request,
-            Authentication auth) {
+            Authentication authentication) {
 
-        User user = (User) auth.getPrincipal();
+        User user = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(
                 ApiResponse.success(
