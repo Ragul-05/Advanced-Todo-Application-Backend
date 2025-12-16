@@ -5,6 +5,7 @@ import com.example.todoapp.dto.ProfileUpdateRequest;
 import com.example.todoapp.model.User;
 import com.example.todoapp.model.UserProfile;
 import com.example.todoapp.repository.UserProfileRepository;
+import com.example.todoapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,11 +16,13 @@ public class ProfileService {
 
     private final UserProfileRepository profileRepository;
     private final CloudinaryService cloudinaryService;
+    private final UserRepository userRepository;
 
     public ProfileService(UserProfileRepository profileRepository,
-                          CloudinaryService cloudinaryService) {
+                          CloudinaryService cloudinaryService,UserRepository userRepository) {
         this.profileRepository = profileRepository;
         this.cloudinaryService = cloudinaryService;
+        this.userRepository = userRepository;
     }
 
     /* GET PROFILE */
@@ -37,15 +40,22 @@ public class ProfileService {
     /* UPDATE NAME & EMAIL */
     public ProfileResponse updateProfile(User user, ProfileUpdateRequest request) {
 
-        if (request.getFullName() != null) {
-            user.setFullName(request.getFullName());
-        }
-        if (request.getEmail() != null) {
-            user.setEmail(request.getEmail());
-        }
+        user.setFullName(request.getFullName());
+        userRepository.save(user);
 
-        return getProfile(user);
+        // Profile may or may not exist
+        UserProfile profile = profileRepository
+                .findByUser(user)
+                .orElseGet(() -> getOrCreateProfile(user));
+
+        ProfileResponse response = new ProfileResponse();
+        response.setFullName(user.getFullName());
+        response.setEmail(user.getEmail()); // 🔒 unchanged
+        response.setProfileImage(profile.getImageUrl());
+
+        return response;
     }
+
 
     /* UPLOAD IMAGE */
     public ProfileResponse uploadProfileImage(User user, MultipartFile file) {
