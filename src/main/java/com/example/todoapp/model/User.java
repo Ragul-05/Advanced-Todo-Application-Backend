@@ -22,6 +22,9 @@ public class User implements UserDetails {
 
     private String password;
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private UserProfile profile;
+
     /* ===== UserDetails ===== */
 
     @Override
@@ -49,4 +52,11 @@ public class User implements UserDetails {
     public void setFullName(String fullName) { this.fullName = fullName; }
     public void setEmail(String email) { this.email = email; }
     public void setPassword(String password) { this.password = password; }
+    public UserProfile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(UserProfile profile) {
+        this.profile = profile;
+    }
 }
