@@ -15,6 +15,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     List<Todo> findByUserAndCompletedTrue(User user);
 
+    List<Todo> findByUserAndCompletedFalse(User user);
+
     List<Todo> findByUserAndCategory(User user, String category);
 
     List<Todo> findByUserAndPriority(User user, String priority);
