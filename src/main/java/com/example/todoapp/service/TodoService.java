@@ -95,6 +95,17 @@ public class TodoService {
     }
 
     /* =========================
+   MARK AS INCOMPLETED
+   ========================= */
+    public TodoResponse markAsIncomplete(Long id, User user) {
+
+        Todo todo = findUserTodo(id, user);
+        todo.setCompleted(false);
+
+        return mapToResponse(todoRepository.save(todo));
+    }
+
+    /* =========================
        GET COMPLETED TODOS
        ========================= */
     public List<TodoResponse> getCompletedTodos(User user) {
@@ -103,6 +114,18 @@ public class TodoService {
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
+
+    /* =========================
+      GET INCOMPLETED TODOS
+      ========================= */
+    public List<TodoResponse> getIncompleteTodos(User user) {
+
+        return todoRepository.findByUserAndCompletedFalse(user)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
 
     /* =========================
        GET TODOS BY CATEGORY
