@@ -130,6 +130,26 @@ public class TodoController {
     }
 
     /* =========================
+   MARK AS INCOMPLETED
+   PATCH /todos/{id}/incomplete
+   ========================= */
+
+    @PatchMapping("/{id}/incomplete")
+    public ResponseEntity<ApiResponse<TodoResponse>> markAsIncomplete(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        User user = (User) authentication.getPrincipal();
+
+        TodoResponse response = todoService.markAsIncomplete(id, user);
+
+        return ResponseEntity.ok(
+                ApiResponse.success("Todo marked as incompleted", response)
+        );
+    }
+
+
+    /* =========================
        GET COMPLETED TODOS
        GET /todos/completed
        ========================= */
@@ -145,6 +165,25 @@ public class TodoController {
                 ApiResponse.success("Completed todos fetched", todos)
         );
     }
+
+    /* =========================
+      GET INCOMPLETED TODOS
+      GET /todos/incompleted
+      ========================= */
+    @GetMapping("/incomplete")
+    public ResponseEntity<ApiResponse<List<TodoResponse>>> getIncompleteTodos(
+            Authentication authentication) {
+
+        User user = (User) authentication.getPrincipal();
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        "Incomplete todos fetched successfully",
+                        todoService.getIncompleteTodos(user)
+                )
+        );
+    }
+
 
     /* =========================
        GET TODOS BY CATEGORY
