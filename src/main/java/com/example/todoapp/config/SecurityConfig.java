@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -28,21 +30,36 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/auth/signup","/auth/login"
-                        ).permitAll()
+
+                        // ---------- AUTH ----------
+                        .requestMatchers("/auth/**").permitAll()
+
+                        // ---------- TODOS ----------
+                        .requestMatchers(HttpMethod.GET, "/todos/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/todos/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/todos/**").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/todos/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/todos/**").authenticated()
+
+                        // ---------- PROFILE ----------
+                        .requestMatchers("/profile/**").authenticated()
+
+                        // ---------- ANY OTHER ----------
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //
