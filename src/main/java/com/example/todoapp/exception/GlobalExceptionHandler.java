@@ -9,9 +9,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiResponse<Object>> handle(RuntimeException ex) {
-        return ResponseEntity
-                .badRequest()
+    public ResponseEntity<ApiResponse<Void>> handleRuntime(RuntimeException ex) {
+        return ResponseEntity.badRequest()
                 .body(ApiResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Void>> handleException(Exception ex) {
+        return ResponseEntity.internalServerError()
+                .body(ApiResponse.error("Internal server error"));
     }
 }
