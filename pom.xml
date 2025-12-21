@@ -75,7 +75,31 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<!-- Cloudinary Core -->
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-core</artifactId>
+			<version>1.39.0</version>
+		</dependency>
 
+		<!-- REQUIRED adapter (this one WORKS) -->
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http45</artifactId>
+			<version>1.39.0</version>
+		</dependency>
+
+		<!-- Apache HttpClient 4.x (MANDATORY) -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.14</version>
+		</dependency>
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary</artifactId>
+			<version>1.0.13</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
