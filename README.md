@@ -1,3 +1,4 @@
+
 # 📝 Todo Application Backend
 
 A secure, scalable Todo Management REST API built with Spring Boot, designed to support a modern React frontend. The backend handles authentication, task management, user profiles, and image uploads with a clean layered architecture.
@@ -289,3 +290,8 @@ http://localhost:8091
 
 ## 📜 License
 This project is licensed under the MIT License.
+=======
+# 📌 Full-Stack Todo Application (React + Spring Boot + JWT)
+
+A full-stack **Todo Management Application** built using **React (Frontend)** and **Spring Boot (Backend)** with **JWT authentication**, category-based task organization, and a fully responsive UI. The application uses **PostgreSQL** for persistent data storage and follows a **clean layered architecture** to ensure scalability and maintainability.
+
