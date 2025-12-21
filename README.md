@@ -1,3 +1,4 @@
+
 # 📝 Todo Application Backend
 
 A secure, scalable Todo Management REST API built with Spring Boot, designed to support a modern React frontend. The backend handles authentication, task management, user profiles, and image uploads with a clean layered architecture.
@@ -289,3 +290,6 @@ http://localhost:8091
 
 ## 📜 License
 This project is licensed under the MIT License.
+
+
+
