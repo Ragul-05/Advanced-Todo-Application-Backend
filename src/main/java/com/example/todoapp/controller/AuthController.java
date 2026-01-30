@@ -21,7 +21,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<User>> register(
             @RequestBody RegisterRequest request) {
 
-        User savedUser = authService.register(request); // ✅ NO CAST
+        User savedUser = authService.register(request); //  NO CAST
 
         return ResponseEntity.ok(
                 ApiResponse.success("User registered successfully", savedUser)

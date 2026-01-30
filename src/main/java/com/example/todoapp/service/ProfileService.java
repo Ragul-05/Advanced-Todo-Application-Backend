@@ -50,7 +50,7 @@ public class ProfileService {
 
         ProfileResponse response = new ProfileResponse();
         response.setFullName(user.getFullName());
-        response.setEmail(user.getEmail()); // 🔒 unchanged
+        response.setEmail(user.getEmail()); //  unchanged
         response.setProfileImage(profile.getImageUrl());
 
         return response;
