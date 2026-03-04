@@ -2,6 +2,7 @@ package com.example.todoapp.security;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import io.jsonwebtoken.JwtException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,8 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-
-        if (path.startsWith("/auth")) {
+        if (path.startsWith("/auth") || path.startsWith("/error") || path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -47,7 +47,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authHeader.substring(7);
         String email = jwtService.extractUsername(token);
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (email == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Invalid or expired token. Please login again.\"}");
+            return;
+        }
+
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
             if (jwtService.isTokenValid(token, userDetails)) {
